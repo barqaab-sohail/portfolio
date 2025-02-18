@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('project_categories', function (Blueprint $table) {
             $table->engine = 'InnoDB';
+            $table->bigIncrements('id');
             $table->string('name');
         });
     }
