@@ -2,24 +2,22 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\ProjectResource\Pages;
+use App\Filament\Resources\ProjectResource\RelationManagers;
+use App\Models\Project;
 use Filament\Forms;
-use Filament\Tables;
-use App\Models\Expert;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
+use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\ExpertResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\ExpertResource\RelationManagers;
-use App\Models\Portfolio;
 
-class ExpertResource extends Resource
+class ProjectResource extends Resource
 {
-    protected static ?string $model = Expert::class;
+    protected static ?string $model = Project::class;
+
+    protected static ?string $navigationGroup = 'Projects';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -27,11 +25,7 @@ class ExpertResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->required()->rules(['required']),
-                Select::make('portfolio_id')
-                    ->label('Portfolio Id')
-                    ->options(Portfolio::all()->pluck('name', 'id'))
-                    ->searchable()->required()->rules(['required'])
+                //
             ]);
     }
 
@@ -39,7 +33,7 @@ class ExpertResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                //
             ])
             ->filters([
                 //
@@ -64,9 +58,9 @@ class ExpertResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListExperts::route('/'),
-            'create' => Pages\CreateExpert::route('/create'),
-            'edit' => Pages\EditExpert::route('/{record}/edit'),
+            'index' => Pages\ListProjects::route('/'),
+            'create' => Pages\CreateProject::route('/create'),
+            'edit' => Pages\EditProject::route('/{record}/edit'),
         ];
     }
 }
