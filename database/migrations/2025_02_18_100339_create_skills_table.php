@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('skills', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
+            $table->string('skill_name');
             $table->bigInteger('portfolio_id')->unsigned();
             $table->smallInteger('level');
             $table->mediumText('remarks');
