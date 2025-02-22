@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Expert;
-use App\Models\Portfolio;
 use App\Models\Skill;
+use App\Models\Expert;
+use App\Models\Education;
+use App\Models\Portfolio;
+use App\Models\Experience;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -16,7 +18,8 @@ class HomeController extends Controller
         $experts = implode(', ', Expert::pluck('name')->toArray());
         $portfolio = Portfolio::first();
         $skills = Skill::all();
-
-        return view('home', compact('experts', 'portfolio', 'skills'));
+        $educations = Education::all();
+        $experiences = Experience::all();
+        return view('home', compact('experts', 'portfolio', 'skills', 'educations', 'experiences'));
     }
 }
