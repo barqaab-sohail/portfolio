@@ -6,16 +6,18 @@ use Filament\Forms;
 use Filament\Tables;
 use App\Models\Expert;
 use Filament\Forms\Form;
+use App\Models\Portfolio;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ExpertResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ExpertResource\RelationManagers;
-use App\Models\Portfolio;
 
 class ExpertResource extends Resource
 {
@@ -31,7 +33,9 @@ class ExpertResource extends Resource
                 Select::make('portfolio_id')
                     ->label('Portfolio Id')
                     ->options(Portfolio::all()->pluck('name', 'id'))
-                    ->searchable()->required()->rules(['required'])
+                    ->searchable()->required()->rules(['required']),
+                TextInput::make('placement')->integer()->unique(ignoreRecord: true)->required()->rules(['required']),
+                Toggle::make('status'),
             ]);
     }
 
@@ -40,6 +44,7 @@ class ExpertResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name'),
+                ToggleColumn::make('status')
             ])
             ->filters([
                 //

@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('firm');
             $table->string('position');
             $table->string('duration');
+            $table->smallInteger('placement')->nullable();
             $table->mediumText('responsibility');
+            $table->boolean('status')->default(false);
             $table->timestamps();
             $table->foreign('portfolio_id')->references('id')->on('portfolios')->onDelete('cascade');
         });

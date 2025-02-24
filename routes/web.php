@@ -4,5 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
 Route::get('/', [HomeController::class, 'index']);
+Route::post('/contactusform', [HomeController::class, 'contactusform'])->name('contactusform');
 
 require __DIR__ . '/auth.php';

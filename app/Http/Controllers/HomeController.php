@@ -16,12 +16,17 @@ class HomeController extends Controller
     {
 
 
-        $experts = implode(', ', Expert::pluck('name')->toArray());
+        $experts = implode(', ', Expert::orderBy('placement', 'ASC')->where('status', 1)->pluck('name')->toArray());
         $portfolio = Portfolio::first();
-        $skills = Skill::all();
-        $educations = Education::all();
-        $experiences = Experience::all();
-        $trainings = Training::all();
+        $skills = Skill::orderBy('placement', 'ASC')->where('status', 1)->get();
+        $educations = Education::orderBy('placement', 'ASC')->where('status', 1)->get();
+        $experiences = Experience::orderBy('placement', 'ASC')->where('status', 1)->get();
+        $trainings = Training::orderBy('placement', 'ASC')->where('status', 1)->get();
         return view('home', compact('experts', 'portfolio', 'skills', 'educations', 'experiences', 'trainings'));
+    }
+
+    public function contactusform(Request $request)
+    {
+        return 'ok';
     }
 }

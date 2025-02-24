@@ -16,6 +16,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('portfolio_id')->unsigned();
             $table->string('name');
+            $table->smallInteger('placement')->nullable();
+            $table->boolean('status')->default(false);
             $table->timestamps();
             $table->foreign('portfolio_id')->references('id')->on('portfolios');
         });

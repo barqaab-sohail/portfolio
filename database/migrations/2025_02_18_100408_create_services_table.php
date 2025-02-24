@@ -17,7 +17,9 @@ return new class extends Migration
             $table->bigInteger('portfolio_id')->unsigned();
             $table->string('icon');
             $table->string('name');
+            $table->smallInteger('placement')->nullable();
             $table->mediumText('intro');
+            $table->boolean('status')->default(false);
             $table->timestamps();
             $table->foreign('portfolio_id')->references('id')->on('portfolios')->onDelete('cascade');
         });

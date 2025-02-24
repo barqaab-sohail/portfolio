@@ -18,6 +18,8 @@ return new class extends Migration
             $table->mediumText('comments');
             $table->string('name');
             $table->string('designation');
+            $table->smallInteger('placement')->nullable();
+            $table->boolean('status')->default(false);
             $table->string('image');
             $table->timestamps();
             $table->foreign('portfolio_id')->references('id')->on('portfolios')->onDelete('cascade');

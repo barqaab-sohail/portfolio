@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('duration');
             $table->string('institution');
             $table->mediumText('introduction');
+            $table->smallInteger('placement')->nullable();
+            $table->boolean('status')->default(false);
             $table->timestamps();
             $table->foreign('portfolio_id')->references('id')->on('portfolios')->onDelete('cascade');
         });

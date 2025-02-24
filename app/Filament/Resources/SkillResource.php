@@ -2,21 +2,23 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SkillResource\Pages;
-use App\Filament\Resources\SkillResource\RelationManagers;
-use App\Models\Skill;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
+use App\Models\Skill;
+use Filament\Forms\Form;
 use App\Models\Portfolio;
-use Filament\Forms\Components\RichEditor;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\RichEditor;
+use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\SkillResource\Pages;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\SkillResource\RelationManagers;
 
 class SkillResource extends Resource
 {
@@ -34,6 +36,8 @@ class SkillResource extends Resource
                     ->options(Portfolio::all()->pluck('name', 'id'))
                     ->searchable()->required()->rules(['required']),
                 TextInput::make('level')->numeric()->required()->rules(['required']),
+                TextInput::make('placement')->integer()->unique(ignoreRecord: true)->required()->rules(['required']),
+                Toggle::make('status'),
                 RichEditor::make('remarks')->required()->rules(['required']),
             ]);
     }
@@ -44,6 +48,7 @@ class SkillResource extends Resource
             ->columns([
                 TextColumn::make('skill_name'),
                 TextColumn::make('level'),
+                ToggleColumn::make('status')
             ])
             ->filters([
                 //

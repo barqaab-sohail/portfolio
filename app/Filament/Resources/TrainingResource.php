@@ -10,9 +10,11 @@ use App\Models\Portfolio;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\TrainingResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -35,6 +37,8 @@ class TrainingResource extends Resource
                     ->searchable()->required()->rules(['required']),
                 TextInput::make('duration')->required()->rules(['required']),
                 TextInput::make('institution')->required()->rules(['required']),
+                TextInput::make('placement')->integer()->unique(ignoreRecord: true)->required()->rules(['required']),
+                Toggle::make('status'),
                 RichEditor::make('introduction')->required()->rules(['required']),
             ]);
     }
@@ -46,6 +50,7 @@ class TrainingResource extends Resource
                 TextColumn::make('name'),
                 TextColumn::make('duration'),
                 TextColumn::make('institution'),
+                ToggleColumn::make('status')
             ])
             ->filters([
                 //

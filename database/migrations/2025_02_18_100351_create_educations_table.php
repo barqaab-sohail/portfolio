@@ -17,8 +17,10 @@ return new class extends Migration
             $table->bigInteger('portfolio_id')->unsigned();
             $table->string('degree_name');
             $table->string('duration');
+            $table->smallInteger('placement')->nullable();
             $table->string('institution');
             $table->mediumText('education_intro');
+            $table->boolean('status')->default(false);
             $table->timestamps();
             $table->foreign('portfolio_id')->references('id')->on('portfolios')->onDelete('cascade');
         });

@@ -10,9 +10,11 @@ use App\Models\Experience;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ExperienceResource\Pages;
@@ -35,6 +37,8 @@ class ExperienceResource extends Resource
                     ->options(Portfolio::all()->pluck('name', 'id'))
                     ->searchable()->required()->rules(['required']),
                 TextInput::make('duration')->required()->rules(['required']),
+                TextInput::make('placement')->integer()->unique(ignoreRecord: true)->required()->rules(['required']),
+                Toggle::make('status'),
                 RichEditor::make('responsibility')->required()->rules(['required']),
             ]);
     }
@@ -46,6 +50,7 @@ class ExperienceResource extends Resource
                 TextColumn::make('position'),
                 TextColumn::make('firm'),
                 TextColumn::make('duration'),
+                ToggleColumn::make('status')
             ])
             ->filters([
                 //

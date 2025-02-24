@@ -17,7 +17,9 @@ return new class extends Migration
             $table->bigInteger('portfolio_id')->unsigned();
             $table->string('short_name');
             $table->string('image');
+            $table->smallInteger('placement')->nullable();
             $table->mediumText('project_intro');
+            $table->boolean('status')->default(false);
             $table->timestamps();
             $table->foreign('portfolio_id')->references('id')->on('portfolios');
         });

@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expert extends Model
 {
-    protected $fillable = ['name', 'portfolio_id'];
+    protected $fillable = ['name', 'portfolio_id', 'placement', 'status'];
 }

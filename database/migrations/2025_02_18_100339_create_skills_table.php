@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('skill_name');
             $table->bigInteger('portfolio_id')->unsigned();
             $table->smallInteger('level');
+            $table->smallInteger('placement')->nullable();
             $table->mediumText('remarks');
+            $table->boolean('status')->default(false);
             $table->timestamps();
             $table->foreign('portfolio_id')->references('id')->on('portfolios')->onDelete('cascade');
         });
