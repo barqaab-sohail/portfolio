@@ -7,7 +7,7 @@
     <title>{{$portfolio->name}} Portfolio</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicons -->
     <link href="{{asset('assets/img/favicon.png')}}" rel="icon">
     <link href="{{asset('assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
@@ -34,6 +34,7 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+    <link rel="stylesheet" href="{{asset('font-awesome/css/font-awesome.min.css')}}">
 </head>
 
 <body class="index-page">
@@ -739,7 +740,9 @@
                     </div>
 
                     <div class="col-lg-7">
-                        <form id="contactUsForm" action="{{route('contactusform')}}" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+                        <form id="contactUsForm" action="" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+                            @csrf
+                            <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
                             <div class="row gy-4">
 
                                 <div class="col-md-6">
@@ -764,10 +767,10 @@
 
                                 <div class="col-md-12 text-center">
                                     <div class="loading">Loading</div>
-                                    <div class="error-message"></div>
+                                    <div class="error-message">testing</div>
                                     <div class="sent-message">Your message has been sent. Thank you!</div>
 
-                                    <button type="submit">Send Message</button>
+                                    <button type="submit">Send Message <i class="fa fa-spinner fa-spin" style="font-size:18px"></i></button>
                                 </div>
 
                             </div>
@@ -786,15 +789,11 @@
 
         <div class="container">
             <div class="copyright text-center ">
-                <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong> <span>All Rights
+                <p>© <span>Copyright</span> <strong class="px-1 sitename"></strong> <span>All Rights
                         Reserved</span></p>
             </div>
             <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you've purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
+                Developed by <a href="#">Sohail Afzal</a>
             </div>
         </div>
 
@@ -808,7 +807,6 @@
 
     <!-- Vendor JS Files -->
     <script src="{{asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('assets/vendor/php-email-form/validate.js')}}"></script>
     <script src="{{asset('assets/vendor/aos/aos.js')}}"></script>
     <script src="{{asset('assets/vendor/typed.js/typed.umd.js')}}"></script>
     <script src="{{asset('assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
@@ -820,32 +818,73 @@
 
     <!-- Main JS File -->
     <script src="{{asset('assets/js/main.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <!-- Google Recaptcha -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfU1eEqAAAAAEJEOMM8xLr2SGBKCVKc2_B0PRnr"></script>
 
     <script>
         $(document).ready(function() {
 
-            // Save post
-            $('#contactUsForm').on('submit', function(e) {
+            $(".fa-spin").hide();
+
+
+            function getRecaptcha() {
+                grecaptcha.ready(function() {
+                    grecaptcha.execute("6LfU1eEqAAAAAEJEOMM8xLr2SGBKCVKc2_B0PRnr", {
+                        action: 'contact'
+                    }).then(function(token) {
+                        $('#recaptchaResponse').val(token); // here i set value to hidden field
+                    });
+                });
+            }
+
+            getRecaptcha();
+
+
+
+            $("#contactUsForm").submit(function(e) {
                 e.preventDefault();
-                let id = $('#post_id').val();
-                let url = id ? `/posts/${id}` : '/posts';
-                let type = id ? 'PUT' : 'POST';
+                let thisForm = this;
+                thisForm.querySelector('.loading').classList.add('d-block');
+                thisForm.querySelector('.error-message').classList.remove('d-block');
+                thisForm.querySelector('.sent-message').classList.remove('d-block');
+                $(".fa-spin").show();
+                let url = "{{route('contactusform')}}";
+                let type = 'POST';
                 let formData = {
-                    title: $('#title').val(),
-                    body: $('#body').val(),
+                    name: $('#name-field').val(),
+                    email: $('#email-field').val(),
+                    message: $('#message-field').val(),
+                    subject: $('#subject-field').val(),
+                    _token: "{{ csrf_token() }}",
+                    recaptcha_response: $('#recaptchaResponse').val(),
+
                 };
 
                 $.ajax({
                     type: type,
                     url: url,
                     data: formData,
-                    dataType: 'json',
+                    //    dataType: 'json',
                     success: function(response) {
-                        $('#contactUsForm').trigger("reset");
-
+                        $(".fa-spin").hide();
+                        thisForm.reset();
+                        thisForm.querySelector('.sent-message').classList.add('d-block');
+                        thisForm.querySelector('.loading').classList.remove('d-block');
                     },
                     error: function(error) {
-                        console.log(error);
+                        var errortext = '';
+                        $.each(error.responseJSON.errors, function(key, value) {
+                            errortext = errortext + value + ' ,'
+                        })
+                        if (error.responseJSON.error) {
+                            errortext = errortext + error.responseJSON.error;
+                        }
+                        $(".fa-spin").hide();
+                        thisForm.querySelector('.loading').classList.remove('d-block');
+                        thisForm.querySelector('.error-message').innerHTML = errortext;
+                        thisForm.querySelector('.error-message').classList.add('d-block');
                     }
                 });
             });
