@@ -2,16 +2,24 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ProjectResource\Pages;
-use App\Filament\Resources\ProjectResource\RelationManagers;
-use App\Models\Project;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Project;
+use Filament\Forms\Form;
+use App\Models\Portfolio;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\ProjectResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\ProjectResource\RelationManagers;
 
 class ProjectResource extends Resource
 {
@@ -25,7 +33,16 @@ class ProjectResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('short_name'),
+                Select::make('portfolio_id')
+                    ->label('Portfolio Id')
+                    ->options(Portfolio::all()->pluck('name', 'id'))
+                    ->searchable()->required()->rules(['required']),
+                TextInput::make('placement')->integer()->unique(ignoreRecord: true)->required()->rules(['required']),
+                Toggle::make('status'),
+                FileUpload::make('image')->disk('public')->directory('project')->required()->rules(['required']),
+                RichEditor::make('project_intro')->required()->rules(['required']),
+
             ]);
     }
 
@@ -33,7 +50,10 @@ class ProjectResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('short_name'),
+                TextColumn::make('placement'),
+                //TextColumn::make('description')->limit(50),
+                ImageColumn::make('image'),
             ])
             ->filters([
                 //
