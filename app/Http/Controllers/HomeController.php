@@ -11,6 +11,7 @@ use App\Models\Portfolio;
 use App\Models\Experience;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\ProjectCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
 
@@ -27,7 +28,8 @@ class HomeController extends Controller
         $educations = Education::orderBy('placement', 'ASC')->where('status', 1)->get();
         $experiences = Experience::orderBy('placement', 'ASC')->where('status', 1)->get();
         $trainings = Training::orderBy('placement', 'ASC')->where('status', 1)->get();
-        return view('home', compact('experts', 'portfolio', 'skills', 'educations', 'experiences', 'trainings'));
+        $projectCategories = ProjectCategory::all();
+        return view('home', compact('experts', 'portfolio', 'skills', 'educations', 'experiences', 'trainings', 'projectCategories'));
     }
 
     public function contactusform(Request $request)

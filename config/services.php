@@ -40,4 +40,6 @@ return [
         'secret' => env('GOOGLE_CAPTCHA_SECRET_KEY'),
     ]
 
+
+
 ];

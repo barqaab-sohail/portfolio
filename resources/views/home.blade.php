@@ -333,10 +333,12 @@
 
                     <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
                         <li data-filter="*" class="filter-active">All</li>
-                        <li data-filter=".filter-app">App</li>
-                        <li data-filter=".filter-product">Product</li>
+                        @foreach($projectCategories as $category)
+                        <li data-filter=".filter-app">{{$category->name}}</li>
+                        @endforeach
+                        <!-- <li data-filter=".filter-product">Product</li>
                         <li data-filter=".filter-branding">Branding</li>
-                        <li data-filter=".filter-books">Books</li>
+                        <li data-filter=".filter-books">Books</li> -->
                     </ul><!-- End Portfolio Filters -->
 
                     <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">

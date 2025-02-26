@@ -15,13 +15,14 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->bigInteger('portfolio_id')->unsigned();
+            $table->bigInteger('project_category_id')->unsigned();
             $table->string('short_name');
-            $table->string('image');
             $table->smallInteger('placement')->nullable();
             $table->mediumText('project_intro');
             $table->boolean('status')->default(false);
             $table->timestamps();
             $table->foreign('portfolio_id')->references('id')->on('portfolios');
+            $table->foreign('project_category_id')->references('id')->on('project_categories');
         });
     }
 

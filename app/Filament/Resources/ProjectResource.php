@@ -8,6 +8,7 @@ use App\Models\Project;
 use Filament\Forms\Form;
 use App\Models\Portfolio;
 use Filament\Tables\Table;
+use App\Models\ProjectCategory;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
@@ -38,9 +39,13 @@ class ProjectResource extends Resource
                     ->label('Portfolio Id')
                     ->options(Portfolio::all()->pluck('name', 'id'))
                     ->searchable()->required()->rules(['required']),
+                Select::make('project_category_id')
+                    ->label('Project Category')
+                    ->options(ProjectCategory::all()->pluck('name', 'id'))
+                    ->searchable()->required()->rules(['required']),
                 TextInput::make('placement')->integer()->unique(ignoreRecord: true)->required()->rules(['required']),
                 Toggle::make('status'),
-                FileUpload::make('image')->disk('public')->directory('project')->required()->rules(['required']),
+                // FileUpload::make('image')->disk('public')->directory('project')->required()->rules(['required']),
                 RichEditor::make('project_intro')->required()->rules(['required']),
 
             ]);
@@ -53,7 +58,7 @@ class ProjectResource extends Resource
                 TextColumn::make('short_name'),
                 TextColumn::make('placement'),
                 //TextColumn::make('description')->limit(50),
-                ImageColumn::make('image'),
+                // ImageColumn::make('image'),
             ])
             ->filters([
                 //
