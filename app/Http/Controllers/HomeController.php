@@ -8,6 +8,7 @@ use App\Models\Training;
 use App\Models\ContactUs;
 use App\Models\Education;
 use App\Models\Portfolio;
+use App\Models\Project;
 use App\Models\Experience;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -28,8 +29,10 @@ class HomeController extends Controller
         $educations = Education::orderBy('placement', 'ASC')->where('status', 1)->get();
         $experiences = Experience::orderBy('placement', 'ASC')->where('status', 1)->get();
         $trainings = Training::orderBy('placement', 'ASC')->where('status', 1)->get();
-        $projectCategories = ProjectCategory::all();
-        return view('home', compact('experts', 'portfolio', 'skills', 'educations', 'experiences', 'trainings', 'projectCategories'));
+        $projectCategories = ProjectCategory::with('project')->get();
+        $projects = Project::with('projectImage', 'projectCategory')->get();
+        // dd($projects);
+        return view('home', compact('experts', 'portfolio', 'skills', 'educations', 'experiences', 'trainings', 'projectCategories', 'projects'));
     }
 
     public function contactusform(Request $request)
