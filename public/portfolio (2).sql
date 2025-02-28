@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 24, 2025 at 02:29 PM
+-- Generation Time: Feb 28, 2025 at 01:54 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,16 @@ SET time_zone = "+00:00";
 --
 -- Database: `portfolio`
 --
+
+--
+-- Dumping data for table `contact_us`
+--
+
+INSERT INTO `contact_us` (`id`, `name`, `email`, `subject`, `message`, `created_at`, `updated_at`) VALUES
+(17, 'test4', 'sohail.afzal@barqaab.com', 'test', 'test', '2025-02-25 07:28:28', '2025-02-25 07:28:28'),
+(18, 'te', 'sohail.afzal@barqaab.com', 'te', 'te', '2025-02-25 08:19:29', '2025-02-25 08:19:29'),
+(19, 'Muhammad Saleem', 'sohail.afzal@barqaab.com', 'test', 'What is Lorem Ipsum?\nLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but', '2025-02-25 08:21:46', '2025-02-25 08:21:46'),
+(20, 'test4', 'sohail.afzal@barqaab.com', 'test', 'What is Lorem Ipsum?\nLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', '2025-02-25 08:22:26', '2025-02-25 08:22:26');
 
 --
 -- Dumping data for table `educations`
@@ -51,6 +61,44 @@ INSERT INTO `experts` (`id`, `portfolio_id`, `name`, `placement`, `status`, `cre
 
 INSERT INTO `portfolios` (`id`, `name`, `date_of_birth`, `phone`, `city`, `email`, `introduction`, `created_at`, `updated_at`) VALUES
 (2, 'Sohail Afzal', '1976-06-06', '00923454145910', 'Lahore, Pakistan', 'sohail.afzal@barqaab.com', '<p>More than 10 years of experience in design and development of Web Applications. Well versed experience in design of database, backend and frontend.&nbsp;</p>', '2025-02-24 00:09:12', '2025-02-24 02:25:16');
+
+--
+-- Dumping data for table `projects`
+--
+
+INSERT INTO `projects` (`id`, `portfolio_id`, `project_category_id`, `short_name`, `placement`, `project_intro`, `status`, `created_at`, `updated_at`) VALUES
+(1, 2, 1, 'Human Resource Management System', 1, '<p>HRMS is a comprehensive web application which includes Employee Complete Information like, Employee Personal Detail, Transfer &amp;Posting Detail, Promotion Detail, Educational Detail, Experience Detail and Employee Personal File.&nbsp; Important alters automatic email to HR manager for information like CNIC Expiry, Contract Expiry and Management related HR Reporting&nbsp;</p>', 1, '2025-02-25 23:13:14', '2025-02-25 23:13:14'),
+(2, 2, 2, 'Asset Management System ', 2, '<p>&nbsp;Asset Management System is a web application, which main purpose is to keep track of the equipment and inventory vital to the day-to-day operation of the company.&nbsp;</p>', 1, '2025-02-25 23:13:56', '2025-02-25 23:13:56'),
+(3, 2, 1, 'Project Management System ', 3, '<p>&nbsp;The purpose of Project Management System (PMS) is to foresee the risks and challenges that could derail the completion of a project. It applies proven methodologies and tools to plan, control, and monitor people, processes, and other components needed to make project a success.&nbsp;</p>', 1, '2025-02-25 23:14:22', '2025-02-25 23:14:22'),
+(4, 2, 2, 'Management Information System ', 4, '<p>&nbsp;A Management Information System (MIS) is a structured system that collects, processes, and analyzes a company\'s data to support agile, informed, and strategic decision-making. It enhances business efficiency by leveraging technology to solve problems and optimize operations.&nbsp;</p>', 1, '2025-02-25 23:15:33', '2025-02-25 23:15:33'),
+(5, 2, 1, 'Leave Management System ', 5, '<p>A Leave Management System (LMS) is a web-based solution that automates the process of managing employee leave requests, approvals, and tracking. It ensures a seamless workflow, reduces administrative workload, and enhances transparency in leave policies.&nbsp; The system allows employees to submit leave requests online, specifying the type of leave, duration, and reason. Managers receive automated notifications for approval or rejection, ensuring a smooth and transparent process.&nbsp;</p>', 1, '2025-02-25 23:15:57', '2025-02-25 23:15:57');
+
+--
+-- Dumping data for table `project_categories`
+--
+
+INSERT INTO `project_categories` (`id`, `name`) VALUES
+(1, 'Web Application'),
+(2, 'Android Application');
+
+--
+-- Dumping data for table `project_details`
+--
+
+INSERT INTO `project_details` (`id`, `project_id`, `client`, `project_date`, `project_url`, `heading`, `introduction`, `created_at`, `updated_at`) VALUES
+(1, 2, 'BARQAAB Consult Services', '2019-02-01', NULL, 'Asset Management System (AMS)', '<p>The Asset Management System is a comprehensive web-based application designed to efficiently track, manage, and optimize equipment and inventory critical to the company\'s operations. It enables seamless asset identification through QR code generation and scanning, allowing quick and accurate tracking. Users can assign assets to employees, departments, or locations, ensuring clear accountability. Additionally, the system provides monitoring of asset availability, status, and location, enhancing visibility and control. By streamlining asset management processes, it improves operational efficiency, reduces losses, and maximizes resource utilization.&nbsp;</p>', '2025-02-25 23:49:55', '2025-02-25 23:49:55'),
+(2, 3, 'BARQAAB Consulting Services ', '2019-06-06', NULL, 'Project Management System (PMS)', '<p>The Project Management System (PMS) is designed to proactively identify and mitigate risks and challenges that may impact project completion. It provides real-time monitoring of task progress, project timelines, and resource utilization. The system enables tracking of budget and expense status, and actual work completed against the total allocated budget. Additionally, it helps identify bottlenecks that may cause project delays, ensuring better decision-making and improved project efficiency&nbsp;</p>', '2025-02-25 23:50:46', '2025-02-25 23:50:46'),
+(3, 4, 'BARQAAB Consulting Services ', '2020-11-01', NULL, 'Web and Android Based Management Information System (MIS)', '<p>A Management Information System (MIS) is a structured system that collects, processes, and analyzes a company\'s data to support agile, informed, and strategic decision-making. It enhances business efficiency by leveraging technology to solve problems and optimize operations.&nbsp;</p>', '2025-02-25 23:52:47', '2025-02-25 23:52:47'),
+(4, 5, 'BARQAAB Consulting Services', '2021-05-02', NULL, 'Based Leave Management System (LMS)', '<p>A Leave Management System (LMS) is a web-based solution that automates the process of managing employee leave requests, approvals, and tracking. It ensures a seamless workflow, reduces administrative workload, and enhances transparency in leave policies.&nbsp; The system allows employees to submit leave requests online, specifying the type of leave, duration, and reason. Managers receive automated notifications for approval or rejection, ensuring a smooth and transparent process.&nbsp;</p>', '2025-02-25 23:53:55', '2025-02-25 23:53:55'),
+(5, 1, 'BARQAAB Consulting Services ', '2018-02-02', NULL, 'Human Resource Management System (HRMS)', '<p>HRMS is a comprehensive web application that manages complete employee information, including personal details, transfer and posting records, promotions, educational background, work experience, and personal files. Additionally, it features automated email alerts to notify the HR manager about important updates such as CNIC expiry, contract expiry, and HR-related management reports&nbsp;</p>', '2025-02-26 00:35:42', '2025-02-26 00:35:42');
+
+--
+-- Dumping data for table `project_images`
+--
+
+INSERT INTO `project_images` (`id`, `project_detail_id`, `image`, `created_at`, `updated_at`) VALUES
+(1, 5, 'project/01JN0BTWM0XWB18H3SMQM9D612.jpg', '2025-02-26 00:31:52', '2025-02-26 00:36:01'),
+(2, 3, 'project/01JN0BVDKAV0R420A1PZZMJVE1.JPG', '2025-02-26 00:32:09', '2025-02-26 00:32:09');
 
 --
 -- Dumping data for table `skills`
