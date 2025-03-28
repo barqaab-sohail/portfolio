@@ -13,8 +13,18 @@ class Project extends Model
         return $this->hasOneThrough(ProjectImage::class, ProjectDetail::class);
     }
 
+    public function projectImages()
+    {
+        return $this->hasManyThrough(ProjectImage::class, ProjectDetail::class);
+    }
+
     public function projectCategory()
     {
         return $this->belongsTo(ProjectCategory::class);
+    }
+
+    public function projectDetail()
+    {
+        return $this->hasOne(projectDetail::class);
     }
 }

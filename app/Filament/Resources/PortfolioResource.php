@@ -16,6 +16,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\ImageColumn;
 
 class PortfolioResource extends Resource
 {
@@ -33,6 +35,7 @@ class PortfolioResource extends Resource
                 TextInput::make('city')->required()->rules(['required']),
                 TextInput::make('email')->email()->required()->rules(['required']),
                 RichEditor::make('introduction')->required()->rules(['required']),
+                FileUpload::make('picture')->disk('public')->directory('picture')->required()->rules(['required']),
             ]);
     }
 
@@ -42,6 +45,7 @@ class PortfolioResource extends Resource
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('date_of_birth')->date(),
+                ImageColumn::make('image'),
             ])
             ->filters([
                 //

@@ -68,4 +68,12 @@ class HomeController extends Controller
 
         return 'data receveid from frontend ok';
     }
+
+    public function project_detail($project_id){
+        $project = Project::with('projectImages', 'projectCategory','projectDetail')->find($project_id);
+        $portfolio = Portfolio::first();
+        return view('project_detail', compact('project','portfolio'));
+
+
+    }
 }
