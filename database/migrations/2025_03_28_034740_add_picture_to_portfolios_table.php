@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::table('portfolios', function (Blueprint $table) {
             $table->string('picture')->after('introduction')->nullable();
+            $table->string('web')->after('picture')->nullable();
+            $table->string('banner')->after('web')->nullable();
         });
     }
 
@@ -23,6 +25,8 @@ return new class extends Migration
     {
         Schema::table('portfolios', function (Blueprint $table) {
             $table->dropColumn('picture');
+            $table->dropColumn('web');
+            $table->dropColumn('banner');
         });
     }
 };

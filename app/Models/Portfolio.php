@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Portfolio extends Model
 {
-    protected $fillable = ['name', 'date_of_birth', 'phone', 'city', 'email', 'introduction','picture'];
+    protected $fillable = ['name', 'date_of_birth', 'phone', 'city', 'email', 'introduction', 'picture', 'web', 'banner'];
 
     public function age()
     {

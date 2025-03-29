@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Skill;
 use App\Models\Expert;
+use App\Models\Project;
+use App\Models\Service;
 use App\Models\Training;
 use App\Models\ContactUs;
 use App\Models\Education;
 use App\Models\Portfolio;
-use App\Models\Project;
 use App\Models\Experience;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -31,8 +32,9 @@ class HomeController extends Controller
         $trainings = Training::orderBy('placement', 'ASC')->where('status', 1)->get();
         $projectCategories = ProjectCategory::with('project')->get();
         $projects = Project::with('projectImage', 'projectCategory')->get();
+        $services = Service::orderBy('placement', 'ASC')->where('status', 1)->get();
         // dd($projects);
-        return view('home', compact('experts', 'portfolio', 'skills', 'educations', 'experiences', 'trainings', 'projectCategories', 'projects'));
+        return view('home', compact('experts', 'portfolio', 'skills', 'educations', 'experiences', 'trainings', 'projectCategories', 'projects', 'services'));
     }
 
     public function contactusform(Request $request)
@@ -69,11 +71,10 @@ class HomeController extends Controller
         return 'data receveid from frontend ok';
     }
 
-    public function project_detail($project_id){
-        $project = Project::with('projectImages', 'projectCategory','projectDetail')->find($project_id);
+    public function project_detail($project_id)
+    {
+        $project = Project::with('projectImages', 'projectCategory', 'projectDetail')->find($project_id);
         $portfolio = Portfolio::first();
-        return view('project_detail', compact('project','portfolio'));
-
-
+        return view('project_detail', compact('project', 'portfolio'));
     }
 }

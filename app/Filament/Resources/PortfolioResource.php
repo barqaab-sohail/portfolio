@@ -36,6 +36,8 @@ class PortfolioResource extends Resource
                 TextInput::make('email')->email()->required()->rules(['required']),
                 RichEditor::make('introduction')->required()->rules(['required']),
                 FileUpload::make('picture')->disk('public')->directory('picture')->required()->rules(['required']),
+                TextInput::make('web')->required()->rules(['required']),
+                FileUpload::make('banner')->disk('public')->directory('banner')->required()->rules(['required']),
             ]);
     }
 
