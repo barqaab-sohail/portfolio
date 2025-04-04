@@ -16,6 +16,7 @@ use Illuminate\Http\Response;
 use App\Models\ProjectCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 
 
 class HomeController extends Controller
@@ -46,18 +47,44 @@ class HomeController extends Controller
             'message' => 'required|max:1000',
         ]);
 
+        // New Method for  Build POST request to get the reCAPTCHA v3 score from Google
 
-        // Build POST request to get the reCAPTCHA v3 score from Google
-        $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
-        $recaptcha_secret = Config::get('services.recaptcha.secret'); // Insert your secret key here
+        $recaptcha_secret = Config::get('services.recaptcha.secret');
         $recaptcha_response = $request->recaptcha_response;
 
-        // Make the POST request
-        $recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
-
-        if (strpos($recaptcha, '"success": false') !== false) {
-            return  response()->json(array('error' => "Google Recaptcha is expired.  Please refresh the page and try again", 'code'      =>  404,), 404);
+        if (!$recaptcha_response) {
+            return response()->json(['error' => 'reCAPTCHA token is missing.'], 400);
         }
+
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => $recaptcha_secret,
+            'response' => $recaptcha_response,
+            'remoteip' => $request->ip(), // Optional but recommended
+        ]);
+
+        $recaptcha_data = $response->json();
+
+        if (!($recaptcha_data['success'] ?? false)) {
+            return response()->json([
+                'error' => 'Google reCAPTCHA failed. Token might be expired or invalid.',
+                'code' => 403,
+            ], 403);
+        }
+
+        // end New Method
+
+
+        // Old Method for  Build POST request to get the reCAPTCHA v3 score from Google
+        // $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
+        // $recaptcha_secret = Config::get('services.recaptcha.secret'); // Insert your secret key here
+        // $recaptcha_response = $request->recaptcha_response;
+
+        // // Make the POST request
+        // $recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
+
+        // if (strpos($recaptcha, '"success": false') !== false) {
+        //     return response()->json(array('error' => "Google Recaptcha is expired.  Please refresh the page and try again", 'code' => 404, ), 404);
+        // }
 
 
 
