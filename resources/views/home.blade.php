@@ -301,64 +301,64 @@
 
 @section('scripts')
 <script>
-$(document).ready(function() {
-    $(".fa-spin").hide();
+    $(document).ready(function() {
+        $(".fa-spin").hide();
 
-    function getRecaptcha() {
-        grecaptcha.ready(function() {
-            grecaptcha.execute("6LfU1eEqAAAAAEJEOMM8xLr2SGBKCVKc2_B0PRnr", {
-                action: 'contact'
-            }).then(function(token) {
-                $('#recaptchaResponse').val(token);
+        function getRecaptcha() {
+            grecaptcha.ready(function() {
+                grecaptcha.execute("6LfU1eEqAAAAAEJEOMM8xLr2SGBKCVKc2_B0PRnr", {
+                    action: 'contact'
+                }).then(function(token) {
+                    $('#recaptchaResponse').val(token);
+                });
+            });
+        }
+
+        getRecaptcha();
+
+        $("#contactUsForm").submit(function(e) {
+            e.preventDefault();
+            let thisForm = this;
+            thisForm.querySelector('.loading').classList.add('d-block');
+            thisForm.querySelector('.error-message').classList.remove('d-block');
+            thisForm.querySelector('.sent-message').classList.remove('d-block');
+            $(".fa-spin").show();
+            let url = "{{route('contactusform')}}";
+            let type = 'POST';
+            let formData = {
+                name: $('#name-field').val(),
+                email: $('#email-field').val(),
+                message: $('#message-field').val(),
+                subject: $('#subject-field').val(),
+                _token: "{{ csrf_token() }}",
+                recaptcha_response: $('#recaptchaResponse').val(),
+            };
+
+            $.ajax({
+                type: type,
+                url: url,
+                data: formData,
+                success: function(response) {
+                    $(".fa-spin").hide();
+                    thisForm.reset();
+                    thisForm.querySelector('.sent-message').classList.add('d-block');
+                    thisForm.querySelector('.loading').classList.remove('d-block');
+                },
+                error: function(error) {
+                    var errortext = '';
+                    $.each(error.responseJSON.errors, function(key, value) {
+                        errortext = errortext + value + ' ,'
+                    })
+                    if (error.responseJSON.error) {
+                        errortext = errortext + error.responseJSON.error;
+                    }
+                    $(".fa-spin").hide();
+                    thisForm.querySelector('.loading').classList.remove('d-block');
+                    thisForm.querySelector('.error-message').innerHTML = errortext;
+                    thisForm.querySelector('.error-message').classList.add('d-block');
+                }
             });
         });
-    }
-
-    getRecaptcha();
-
-    $("#contactUsForm").submit(function(e) {
-        e.preventDefault();
-        let thisForm = this;
-        thisForm.querySelector('.loading').classList.add('d-block');
-        thisForm.querySelector('.error-message').classList.remove('d-block');
-        thisForm.querySelector('.sent-message').classList.remove('d-block');
-        $(".fa-spin").show();
-        let url = "{{route('contactusform')}}";
-        let type = 'POST';
-        let formData = {
-            name: $('#name-field').val(),
-            email: $('#email-field').val(),
-            message: $('#message-field').val(),
-            subject: $('#subject-field').val(),
-            _token: "{{ csrf_token() }}",
-            recaptcha_response: $('#recaptchaResponse').val(),
-        };
-
-        $.ajax({
-            type: type,
-            url: url,
-            data: formData,
-            success: function(response) {
-                $(".fa-spin").hide();
-                thisForm.reset();
-                thisForm.querySelector('.sent-message').classList.add('d-block');
-                thisForm.querySelector('.loading').classList.remove('d-block');
-            },
-            error: function(error) {
-                var errortext = '';
-                $.each(error.responseJSON.errors, function(key, value) {
-                    errortext = errortext + value + ' ,'
-                })
-                if (error.responseJSON.error) {
-                    errortext = errortext + error.responseJSON.error;
-                }
-                $(".fa-spin").hide();
-                thisForm.querySelector('.loading').classList.remove('d-block');
-                thisForm.querySelector('.error-message').innerHTML = errortext;
-                thisForm.querySelector('.error-message').classList.add('d-block');
-            }
-        });
     });
-});
 </script>
 @endsection
