@@ -47,7 +47,7 @@ class PortfolioResource extends Resource
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('date_of_birth')->date(),
-                ImageColumn::make('image'),
+                ImageColumn::make('picture'),
             ])
             ->filters([
                 //

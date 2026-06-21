@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('email');
             $table->mediumText('introduction');
+            $table->string('picture');
             $table->timestamps();
         });
     }
