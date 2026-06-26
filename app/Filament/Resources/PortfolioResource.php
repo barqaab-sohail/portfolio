@@ -75,17 +75,17 @@ class PortfolioResource extends Resource
                     ->schema([
                         FileUpload::make('picture')
                             ->label('Profile Picture')
-                            ->image()
                             ->imageEditor()
                             ->disk('public')
                             ->directory('picture')
+                            ->rules(['image', 'mimes:jpg,jpeg,png,webp'])
                             ->required(),
                         FileUpload::make('banner')
                             ->label('Hero Banner')
-                            ->image()
                             ->imageEditor()
                             ->disk('public')
                             ->directory('banner')
+                            ->rules(['image', 'mimes:jpg,jpeg,png,webp'])
                             ->required(),
                     ]),
                 // Optional SEO fields override the default name/introduction metadata.
