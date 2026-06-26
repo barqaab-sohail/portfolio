@@ -1,15 +1,19 @@
 @extends('layouts.app')
 
-@section('title', $portfolio->name . ' Portfolio')
+@section('title', $portfolio->meta_title ?: $portfolio->name . ' Portfolio')
+@section('meta_description', $portfolio->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($portfolio->introduction), 155))
+@section('meta_keywords', $portfolio->meta_keywords)
 @section('portfolio_name', $portfolio->name)
 
 @section('content')
 <!-- Hero Section -->
 <section id="hero" class="hero section dark-background">
+    @if($portfolio->banner)
     <img src="{{asset('storage/'. $portfolio->banner)}}" alt="" data-aos="fade-in" class="">
+    @endif
     <div class="container" data-aos="fade-up" data-aos-delay="100">
         <h2>{{$portfolio->name}}</h2>
-        <p>I'm <span class="typed" data-typed-items="{{$experts}}">Developer</span><span
+        <p>I'm <span class="typed" data-typed-items="{{$experts ?: ($portfolio->job_title ?: 'Developer')}}">{{$portfolio->job_title ?: 'Developer'}}</span><span
                 class="typed-cursor typed-cursor--blink" aria-hidden="true"></span><span
                 class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
     </div>
@@ -24,43 +28,56 @@
 
     <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row gy-4 justify-content-center">
-            <div class="col-lg-4">
-                <img src="{{asset('storage/'. $portfolio->picture)}}" class="img-fluid" alt="">
+            <div class="col-lg-4 col-md-5">
+                @if($portfolio->picture)
+                <img src="{{asset('storage/'. $portfolio->picture)}}" class="img-fluid about-profile-picture" alt="">
+                @endif
             </div>
             <div class="col-lg-8 content">
-                <h2>Full Stack Web Developer.</h2>
+                <h2>{{$portfolio->job_title ?: 'Full Stack Web Developer'}}.</h2>
                 <p class="fst-italic py-3">
                     {!!$portfolio->introduction!!}
                 </p>
                 <div class="row">
                     <div class="col-lg-6">
                         <ul>
+                            @if($portfolio->date_of_birth)
                             <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong>
                                 <span>{{\Carbon\Carbon::parse($portfolio->date_of_birth)->format('F d, Y')}}</span>
                             </li>
+                            @endif
+                            @if($portfolio->web)
                             <li><i class="bi bi-chevron-right"></i> <strong>Website:</strong>
-                                <span>{{$portfolio->web}}</span>
+                                <span><a href="{{$portfolio->web}}" target="_blank" rel="noopener">{{$portfolio->web}}</a></span>
                             </li>
+                            @endif
+                            @if($portfolio->phone)
                             <li><i class="bi bi-chevron-right"></i> <strong>Phone/Whatsapp:</strong>
                                 <span>{{$portfolio->phone}}</span>
                             </li>
+                            @endif
+                            @if($portfolio->city)
                             <li><i class="bi bi-chevron-right"></i> <strong>City:</strong>
                                 <span>{{$portfolio->city}}</span>
                             </li>
+                            @endif
                         </ul>
                     </div>
                     <div class="col-lg-6">
                         <ul>
+                            @if($portfolio->age())
                             <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong>
                                 <span>{{$portfolio->age()}} years</span>
                             </li>
-                            <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Master</span>
+                            @endif
+                            <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong>
+                                <span>{{$portfolio->degree ?: 'Master'}}</span>
                             </li>
                             <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong>
                                 <span>{{$portfolio->email}}</span>
                             </li>
                             <li><i class="bi bi-chevron-right"></i> <strong>Freelance:</strong>
-                                <span>Available</span>
+                                <span>{{$portfolio->freelance_status ?: 'Available'}}</span>
                             </li>
                         </ul>
                     </div>
@@ -160,7 +177,7 @@
                 @if($project->projectImage)
                 <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-{{$project->project_category_id}}">
                     <div class="portfolio-content h-100">
-                        <img src="{{asset('storage/'. $project->projectImage?->image??'')}}" class="img-fluid" alt="">
+                        <img src="{{asset('storage/'. $project->projectImage?->image??'')}}" class="img-fluid portfolio-project-image" alt="{{$project->short_name}}">
                         <div class="portfolio-info">
                             <h4>{{$project->short_name}}</h4>
                             <a href="{{asset('storage/'. $project->projectImage?->image??'')}}"
@@ -209,7 +226,7 @@
     <!-- Section Title -->
     <div class="container section-title" data-aos="fade-up">
         <h2>Contact</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <p>Have a project, collaboration, or question? Send a message and I will get back to you.</p>
     </div><!-- End Section Title -->
 
     <div class="container" data-aos="fade-up" data-aos-delay="100">

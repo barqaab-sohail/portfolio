@@ -3,20 +3,18 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PortfolioResource\Pages;
-use App\Filament\Resources\PortfolioResource\RelationManagers;
 use App\Models\Portfolio;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\ImageColumn;
 
 class PortfolioResource extends Resource
@@ -29,15 +27,108 @@ class PortfolioResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->required()->rules(['required']),
-                DatePicker::make('date_of_birth')->required()->rules(['required']),
-                TextInput::make('phone')->numeric()->required()->rules(['required']),
-                TextInput::make('city')->required()->rules(['required']),
-                TextInput::make('email')->email()->required()->rules(['required']),
-                RichEditor::make('introduction')->required()->rules(['required']),
-                FileUpload::make('picture')->disk('public')->directory('picture')->required()->rules(['required']),
-                TextInput::make('web')->required()->rules(['required']),
-                FileUpload::make('banner')->disk('public')->directory('banner')->required()->rules(['required']),
+                // Main public profile content shown in the hero and About sections.
+                Section::make('Profile Information')
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Full Name')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('job_title')
+                            ->label('Job Title')
+                            ->placeholder('Full Stack Web Developer')
+                            ->maxLength(255),
+                        DatePicker::make('date_of_birth')
+                            ->label('Date of Birth')
+                            ->required(),
+                        TextInput::make('phone')
+                            ->label('Phone / WhatsApp')
+                            ->tel()
+                            ->required()
+                            ->maxLength(50),
+                        TextInput::make('city')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('email')
+                            ->email()
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('web')
+                            ->label('Website URL')
+                            ->url()
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('degree')
+                            ->placeholder('Master')
+                            ->maxLength(255),
+                        TextInput::make('freelance_status')
+                            ->placeholder('Available')
+                            ->maxLength(255),
+                        RichEditor::make('introduction')
+                            ->columnSpanFull()
+                            ->required(),
+                    ]),
+                // Images are stored on the public disk and rendered by the frontend.
+                Section::make('Images')
+                    ->columns(2)
+                    ->schema([
+                        FileUpload::make('picture')
+                            ->label('Profile Picture')
+                            ->image()
+                            ->imageEditor()
+                            ->disk('public')
+                            ->directory('picture')
+                            ->required(),
+                        FileUpload::make('banner')
+                            ->label('Hero Banner')
+                            ->image()
+                            ->imageEditor()
+                            ->disk('public')
+                            ->directory('banner')
+                            ->required(),
+                    ]),
+                // Optional SEO fields override the default name/introduction metadata.
+                Section::make('SEO')
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('meta_title')
+                            ->label('Meta Title')
+                            ->maxLength(255),
+                        TextInput::make('meta_keywords')
+                            ->label('Meta Keywords')
+                            ->maxLength(255),
+                        Textarea::make('meta_description')
+                            ->label('Meta Description')
+                            ->rows(3)
+                            ->maxLength(500)
+                            ->columnSpanFull(),
+                    ]),
+                // Filled links appear as sidebar social icons on the public site.
+                Section::make('Social Links')
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('linkedin_url')
+                            ->label('LinkedIn URL')
+                            ->url()
+                            ->maxLength(255),
+                        TextInput::make('github_url')
+                            ->label('GitHub URL')
+                            ->url()
+                            ->maxLength(255),
+                        TextInput::make('facebook_url')
+                            ->label('Facebook URL')
+                            ->url()
+                            ->maxLength(255),
+                        TextInput::make('instagram_url')
+                            ->label('Instagram URL')
+                            ->url()
+                            ->maxLength(255),
+                        TextInput::make('whatsapp_url')
+                            ->label('WhatsApp URL')
+                            ->url()
+                            ->maxLength(255),
+                    ]),
             ]);
     }
 
@@ -45,13 +136,20 @@ class PortfolioResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('date_of_birth')->date(),
-                ImageColumn::make('picture'),
+                ImageColumn::make('picture')
+                    ->label('Photo')
+                    ->disk('public'),
+                TextColumn::make('name')
+                    ->label('Full Name')
+                    ->searchable(),
+                TextColumn::make('job_title')
+                    ->searchable(),
+                TextColumn::make('date_of_birth')
+                    ->date(),
+                TextColumn::make('email')
+                    ->searchable(),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -64,9 +162,7 @@ class PortfolioResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

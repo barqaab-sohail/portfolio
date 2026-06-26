@@ -8,6 +8,9 @@ class ProjectImage extends Model
 {
     protected $fillable = ['project_detail_id', 'image'];
 
+    /**
+     * Detail record that owns this gallery image.
+     */
     public function projectDetail()
     {
         return $this->belongsTo(ProjectDetail::class);

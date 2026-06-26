@@ -12,9 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('portfolios', function (Blueprint $table) {
-            $table->string('picture')->after('introduction')->nullable();
-            $table->string('web')->after('picture')->nullable();
-            $table->string('banner')->after('web')->nullable();
+            if (!Schema::hasColumn('portfolios', 'picture')) {
+                $table->string('picture')->after('introduction')->nullable();
+            }
+
+            if (!Schema::hasColumn('portfolios', 'web')) {
+                $table->string('web')->after('picture')->nullable();
+            }
+
+            if (!Schema::hasColumn('portfolios', 'banner')) {
+                $table->string('banner')->after('web')->nullable();
+            }
         });
     }
 
@@ -24,9 +32,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('portfolios', function (Blueprint $table) {
-            $table->dropColumn('picture');
-            $table->dropColumn('web');
-            $table->dropColumn('banner');
+            foreach (['web', 'banner'] as $column) {
+                if (Schema::hasColumn('portfolios', $column)) {
+                    $table->dropColumn($column);
+                }
+            }
         });
     }
 };

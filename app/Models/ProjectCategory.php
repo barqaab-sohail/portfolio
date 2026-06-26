@@ -10,6 +10,9 @@ class ProjectCategory extends Model
 
     protected $fillable = ['name',];
 
+    /**
+     * Representative project used when building category filters.
+     */
     public function project()
     {
         return $this->hasOne(Project::class);

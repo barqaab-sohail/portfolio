@@ -12,21 +12,39 @@ use App\Models\Education;
 use App\Models\Portfolio;
 use App\Models\Experience;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Models\ProjectCategory;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
-
 class HomeController extends Controller
 {
+    /**
+     * Fallback profile keeps the public pages renderable on a fresh install.
+     */
+    private function portfolio(): Portfolio
+    {
+        return Portfolio::first() ?? new Portfolio([
+            'name' => config('app.name', 'Portfolio'),
+            'job_title' => 'Developer',
+            'city' => '',
+            'email' => '',
+            'phone' => '',
+            'web' => url('/'),
+            'degree' => '',
+            'freelance_status' => '',
+            'introduction' => 'Portfolio content can be managed from the Filament admin panel.',
+            'picture' => '',
+            'banner' => '',
+        ]);
+    }
+
+    /**
+     * Show the public portfolio page with all active content blocks.
+     */
     public function index()
     {
-
-
         $experts = implode(', ', Expert::orderBy('placement', 'ASC')->where('status', 1)->pluck('name')->toArray());
-        $portfolio = Portfolio::first();
+        $portfolio = $this->portfolio();
         $skills = Skill::orderBy('placement', 'ASC')->where('status', 1)->get();
         $educations = Education::orderBy('placement', 'ASC')->where('status', 1)->get();
         $experiences = Experience::orderBy('placement', 'ASC')->where('status', 1)->get();
@@ -34,10 +52,13 @@ class HomeController extends Controller
         $projectCategories = ProjectCategory::with('project')->get();
         $projects = Project::with('projectImage', 'projectCategory')->get();
         $services = Service::orderBy('placement', 'ASC')->where('status', 1)->get();
-        // dd($projects);
+
         return view('home', compact('experts', 'portfolio', 'skills', 'educations', 'experiences', 'trainings', 'projectCategories', 'projects', 'services'));
     }
 
+    /**
+     * Validate and store messages submitted from the public contact form.
+     */
     public function contactusform(Request $request)
     {
         $validated = $request->validate([
@@ -47,8 +68,7 @@ class HomeController extends Controller
             'message' => 'required|max:1000',
         ]);
 
-        // New Method for  Build POST request to get the reCAPTCHA v3 score from Google
-
+        // Verify the reCAPTCHA v3 token server-side before saving the message.
         $recaptcha_secret = Config::get('services.recaptcha.secret');
         $recaptcha_response = $request->recaptcha_response;
 
@@ -64,6 +84,7 @@ class HomeController extends Controller
 
         $recaptcha_data = $response->json();
 
+        // Google returns success=false for expired, invalid, or reused tokens.
         if (!($recaptcha_data['success'] ?? false)) {
             return response()->json([
                 'error' => 'Google reCAPTCHA failed. Token might be expired or invalid.',
@@ -71,37 +92,23 @@ class HomeController extends Controller
             ], 403);
         }
 
-        // end New Method
-
-
-        // Old Method for  Build POST request to get the reCAPTCHA v3 score from Google
-        // $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
-        // $recaptcha_secret = Config::get('services.recaptcha.secret'); // Insert your secret key here
-        // $recaptcha_response = $request->recaptcha_response;
-
-        // // Make the POST request
-        // $recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
-
-        // if (strpos($recaptcha, '"success": false') !== false) {
-        //     return response()->json(array('error' => "Google Recaptcha is expired.  Please refresh the page and try again", 'code' => 404, ), 404);
-        // }
-
-
-
         ContactUs::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'subject' => $request->subject,
-            'message' => $request->message
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'subject' => $validated['subject'],
+            'message' => $validated['message'],
         ]);
 
         return 'data receveid from frontend ok';
     }
 
+    /**
+     * Show one project with its category, detail record, and gallery images.
+     */
     public function project_detail($project_id)
     {
         $project = Project::with('projectImages', 'projectCategory', 'projectDetail')->find($project_id);
-        $portfolio = Portfolio::first();
+        $portfolio = $this->portfolio();
         return view('project_detail', compact('project', 'portfolio'));
     }
 }

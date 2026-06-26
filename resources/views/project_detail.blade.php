@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', $portfolio->name . ' Portfolio')
+@section('title', $portfolio->meta_title ?: $portfolio->name . ' Portfolio')
+@section('meta_description', $portfolio->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($portfolio->introduction), 155))
+@section('meta_keywords', $portfolio->meta_keywords)
 @section('portfolio_name', $portfolio->name)
 
 @section('content')

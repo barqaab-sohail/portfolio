@@ -1,66 +1,132 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Portfolio Management Website
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is a Laravel portfolio website with a Filament admin panel. It lets an admin manage personal profile information, skills, education, training, experience, services, projects, project images, contact messages, SEO metadata, and social media links.
 
-## About Laravel
+## Main Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Public portfolio homepage with hero, about, skills, resume, portfolio, services, and contact sections.
+- Filament admin dashboard for managing all portfolio content.
+- Dynamic job title, profile picture, banner image, website, degree, freelance status, and introduction.
+- Project categories, project detail pages, and project image galleries.
+- Contact form with Google reCAPTCHA validation.
+- SEO fields for meta title, description, keywords, and Open Graph metadata.
+- Social links for GitHub, LinkedIn, Facebook, Instagram, and WhatsApp.
+- Responsive frontend based on the iPortfolio Bootstrap template.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.2+
+- Laravel 11
+- Filament 3
+- MySQL
+- Bootstrap, Bootstrap Icons, AOS, GLightbox, Isotope, Swiper
 
-## Learning Laravel
+## Important Paths
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Public homepage: `resources/views/home.blade.php`
+- Main layout: `resources/views/layouts/app.blade.php`
+- Project detail page: `resources/views/project_detail.blade.php`
+- Public routes: `routes/web.php`
+- Homepage/contact controller: `app/Http/Controllers/HomeController.php`
+- Portfolio admin resource: `app/Filament/Resources/PortfolioResource.php`
+- Main frontend CSS: `public/assets/css/main.css`
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. Install PHP dependencies:
 
-## Laravel Sponsors
+```bash
+composer install
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. Install JavaScript dependencies:
 
-### Premium Partners
+```bash
+npm install
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+3. Create the environment file:
 
-## Contributing
+```bash
+copy .env.example .env
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Configure the database in `.env`:
 
-## Code of Conduct
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=portfolio
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. Configure Google reCAPTCHA for the contact form:
 
-## Security Vulnerabilities
+```env
+GOOGLE_CAPTCHA_SITE_KEY=your_site_key
+GOOGLE_CAPTCHA_SECRET_KEY=your_secret_key
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. Run migrations:
 
-## License
+```bash
+php artisan migrate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+7. Link public storage for uploaded images:
+
+```bash
+php artisan storage:link
+```
+
+8. Start the local server:
+
+```bash
+php artisan serve
+```
+
+The site will usually be available at `http://127.0.0.1:8000`.
+
+## Admin Panel
+
+The Filament admin panel is available at:
+
+```text
+/admin
+```
+
+Use the admin panel to manage:
+
+- Portfolio profile, SEO, images, and social links
+- Skills
+- Education
+- Trainings and courses
+- Experience
+- Services
+- Project categories
+- Projects
+- Project details
+- Project images
+- Contact form submissions
+
+## Frontend Content Flow
+
+The homepage is powered by `HomeController@index`. It loads active records ordered by `placement` where applicable, then passes them to `resources/views/home.blade.php`.
+
+The contact form submits to `HomeController@contactusform`, validates the form input, verifies the Google reCAPTCHA token, and stores the message in the `contact_us` table.
+
+Project detail pages are loaded through:
+
+```text
+/project_detail/{id}
+```
+
+## Notes
+
+- Uploaded profile, banner, and project images are stored on the `public` disk.
+- Fill the Portfolio record first, because the frontend layout expects profile data for the sidebar, SEO tags, and contact details.
+- If social URLs are empty, their sidebar icons are hidden automatically.
+- If SEO fields are empty, the site falls back to the portfolio name and introduction.
