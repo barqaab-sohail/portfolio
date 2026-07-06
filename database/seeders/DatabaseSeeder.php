@@ -20,5 +20,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'sohail.afzal@barqaab.com',
             'password' => bcrypt('Great@786'), // You can set a default password for the seeded user
         ]);
+
+        $this->call(CvPortfolioRefreshSeeder::class);
     }
 }
