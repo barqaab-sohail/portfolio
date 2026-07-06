@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,13 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Sohail Afzal',
-            'email' => 'sohail.afzal@barqaab.com',
-            'password' => bcrypt('Great@786'), // You can set a default password for the seeded user
-        ]);
+        User::updateOrCreate(
+            ['email' => 'sohail.afzal@barqaab.com'],
+            [
+                'name' => 'Sohail Afzal',
+                'password' => Hash::make('Great@786'),
+            ]
+        );
 
         $this->call(CvPortfolioRefreshSeeder::class);
     }
